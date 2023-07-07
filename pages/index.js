@@ -27,7 +27,7 @@ const Index = ({ vendors }) => {
     // console.log(id);
     let conf = confirm("Are You Sure?");
     if (conf) {
-      const resp = await fetch(`${process.env.NEXT_URL}/api/deleteVendors?id=${id}`, {
+      const resp = await fetch(`https://banking-vendor-system.vercel.app/api/deleteVendors?id=${id}`, {
         method: 'DELETE'
       });
     }
@@ -73,7 +73,7 @@ const Index = ({ vendors }) => {
     }
     // console.log(newPayload);
     //Update Request
-    await fetch(`${process.env.NEXT_URL}/api/updateVendors`, {
+    await fetch(`https://banking-vendor-system.vercel.app/api/updateVendors`, {
       method: 'POST',
       body: JSON.stringify(newPayload),
       headers: {
