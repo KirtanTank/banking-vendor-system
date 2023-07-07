@@ -25,13 +25,13 @@ const VendorComp = () => {
         }
         // console.log(VendorPayload);
         // Send Data to Server
-        await fetch(`https://banking-vendor-system.vercel.app/api/addVendors`, {
-            method: 'POST',
-            body: JSON.stringify(VendorPayload),
-            headers: {
-                'Content-type': 'application/json; charset=UTF-8',
-            },
-        });
+        // await fetch(`https://banking-vendor-system.vercel.app/api/addVendors`, {
+        //     method: 'POST',
+        //     body: JSON.stringify(VendorPayload),
+        //     headers: {
+        //         'Content-type': 'application/json; charset=UTF-8',
+        //     },
+        // });
         setAccNo("")
         setAddress1("")
         setAddress2("")
