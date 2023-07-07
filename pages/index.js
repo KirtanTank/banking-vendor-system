@@ -25,13 +25,13 @@ const Index = ({ vendors }) => {
   // Delete Request
   const deleteVendor = async (id) => {
     // console.log(id);
-    // let conf = confirm("Are You Sure?");
-    // if (conf) {
-    //   const resp = await fetch(`${process.env.NEXT_URL}/api/deleteVendors?id=${id}`, {
-    //     method: 'DELETE'
-    //   });
-    // }
-    // window.location.reload(true);
+    let conf = confirm("Are You Sure?");
+    if (conf) {
+      const resp = await fetch(`${process.env.NEXT_URL}/api/deleteVendors?id=${id}`, {
+        method: 'DELETE'
+      });
+    }
+    window.location.reload(true);
   }
 
   const [show, setShow] = useState(false);
@@ -73,15 +73,15 @@ const Index = ({ vendors }) => {
     }
     // console.log(newPayload);
     //Update Request
-    // await fetch(`${process.env.NEXT_URL}/api/updateVendors`, {
-    //   method: 'POST',
-    //   body: JSON.stringify(newPayload),
-    //   headers: {
-    //     'Content-type': 'application/json; charset=UTF-8',
-    //   },
-    // });
-    // setShow(false);
-    // window.location.reload(true);
+    await fetch(`${process.env.NEXT_URL}/api/updateVendors`, {
+      method: 'POST',
+      body: JSON.stringify(newPayload),
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+    });
+    setShow(false);
+    window.location.reload(true);
   }
 
   const lastVendor = currentPage*vendorsPerPage;
