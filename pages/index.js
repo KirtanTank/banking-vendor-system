@@ -18,7 +18,7 @@ const Index = ({ vendors }) => {
   const [country, setCountry] = useState("");
 
   // Pagination
-  const [totalVendors, setTotalVendors] = useState(vendors.length);
+  const [totalVendors] = useState(vendors.length);
   const [currentPage, setCurrentPage] = useState(1);
   const [vendorsPerPage] = useState(10);
 
