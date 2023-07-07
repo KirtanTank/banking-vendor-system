@@ -1,7 +1,7 @@
 import Link from "next/link";
 import LogBtn from "./LogBtn";
 
-const NavbarComp = () => {
+const Navbar = () => {
     return (
         <div>
         <header className="text-black body-font">
@@ -26,4 +26,4 @@ const NavbarComp = () => {
      );
 }
  
-export default NavbarComp;
+export default Navbar;
