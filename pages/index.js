@@ -1,20 +1,20 @@
-import Vendor from "../models/Vendor";
-import mongoose from "mongoose";
+// import Vendor from "../models/Vendor";
+// import mongoose from "mongoose";
 import { useState, useEffect } from 'react';
 import Pagination from '../components/Pagination';
 
 var arr = [];
+const getVendors = async () => {
+  await fetch(`/api/getVendors`)
+  .then(data => {return {props: { vendors: JSON.parse(JSON.stringify(data)) },}})
+  .catch(err => console.log(err));
+}
+
+useEffect(() => {
+  getVendors();
+}, []);
+
 const Index = ({vendors}) => {
-
-  const getVendors = async () => {
-    await fetch(`/api/getVendors`)
-    .then(data => {return {vendors: JSON.parse(JSON.stringify(data))}})
-    .catch(err => console.log(err));
-  }
-
-  useEffect(() => {
-    getVendors();
-  }, []);
 
   const [_id, setId] = useState("");
   const [name, setName] = useState("");
