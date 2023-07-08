@@ -4,9 +4,8 @@ import { useState } from 'react';
 import Pagination from '../components/Pagination';
 
 var arr = [];
-const Index = ({ vendors }) => {
-  console.log(vendors);
-
+var vendors = undefined;
+const Index = () => {
   const [_id, setId] = useState("");
   const [name, setName] = useState("");
   const [bankName, setBankName] = useState("");
