@@ -25,7 +25,7 @@ const Index = () => {
   const getVendors = async () => {
     vendors = await fetch(`https://astonishing-sherbet-d606e1.netlify.app/api/getVendors`);
   }
-  window.onload(getVendors());
+  window.onload(getVendors())
 
   // Delete Request
   const deleteVendor = async (id) => {
