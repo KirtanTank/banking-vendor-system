@@ -4,8 +4,8 @@ import { useState } from 'react';
 import Pagination from '../components/Pagination';
 
 var arr = [];
-const Index = () => {
-  var vendors;
+const Index = ({vendors}) => {
+  
   const [_id, setId] = useState("");
   const [name, setName] = useState("");
   const [bankName, setBankName] = useState("");
@@ -21,17 +21,13 @@ const Index = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [vendorsPerPage] = useState(10);
 
-  // GET request
-  const getVendors = async () => {
-    vendors = await fetch(`https://astonishing-sherbet-d606e1.netlify.app/api/getVendors`);
-  }
-  window.onload(getVendors())
+  
 
   // Delete Request
   const deleteVendor = async (id) => {
     let conf = confirm("Are You Sure?");
     if (conf) {
-      const resp = await fetch(`https://astonishing-sherbet-d606e1.netlify.app/api/deleteVendors?id=${id}`, {
+      const resp = await fetch(`/api/deleteVendors?id=${id}`, {
         method: 'DELETE',
         headers: {
           'Content-type': 'application/json; charset=UTF-8',
@@ -84,7 +80,7 @@ const Index = () => {
     }
     // console.log(newPayload);
     //Update Request
-    await fetch(`https://astonishing-sherbet-d606e1.netlify.app/api/updateVendors`, {
+    await fetch(`/api/updateVendors`, {
       method: 'POST',
       body: JSON.stringify(newPayload),
       headers: {
@@ -106,7 +102,7 @@ const Index = () => {
 
   const paginate = pageNumber => setCurrentPage(pageNumber);
   return (
-    <>
+    <div onload="getVendors()">
       <div className="grid grid-cols-4 gap-4 justify-items-center">
         {currentVendors.map((item) => {
           return <div key={item._id} className="w-full items-center content-center max-w-xs bg-white rounded-xl shadow-[0_25px_80px_-5px_rgba(0,0,0,0.4)] dark:bg-gray-800 dark:border-gray-700">
@@ -181,20 +177,20 @@ const Index = () => {
       
       <Pagination vendorsPerPage={vendorsPerPage} totalVendors={totalVendors} paginate={paginate} />
 
-    </>
+    </div>
   );
 }
 
-// export const getServerSideProps = async () => {
-//   if (!mongoose.connections[0].readyState) {
-//     await mongoose.connect(process.env.MONGO_URI);
-//   }
-//   let res = await Vendor.find();
-//   // console.log(res);
-//   return {
-//     props: { vendors: JSON.parse(JSON.stringify(res)) },
-//   }
-// }
+export const getServerSideProps = async () => {
+  if (!mongoose.connections[0].readyState) {
+    await mongoose.connect(process.env.MONGO_URI);
+  }
+  let res = await Vendor.find();
+  // console.log(res);
+  return {
+    props: { vendors: JSON.parse(JSON.stringify(res)) },
+  }
+}
 
 
 export default Index;
