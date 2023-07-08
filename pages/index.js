@@ -7,14 +7,14 @@ var arr = [];
 const getVendors = async () => {
   await fetch(`/api/getVendors`)
   .then(data => data.json())
-  .then(vendors => {return vendors={vendors}})
+  .then(vendors => console.log(vendors))
   .catch(err => console.log(err));
 }
 
 
 const Index = ({vendors}) => {
   useEffect(() => {
-    getVendors();
+    getVendors(vendors={vendors});
   }, []);
   
   const [_id, setId] = useState("");
