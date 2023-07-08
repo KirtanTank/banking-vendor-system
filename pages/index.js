@@ -6,7 +6,8 @@ import Pagination from '../components/Pagination';
 var arr = [];
 const getVendors = async () => {
   await fetch(`/api/getVendors`)
-  .then(data => {return {props: { vendors: JSON.parse(JSON.stringify(data)) },}})
+  .then(data => data.json())
+  .then(vendors => {return vendors={vendors}})
   .catch(err => console.log(err));
 }
 
