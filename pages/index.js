@@ -107,7 +107,7 @@ const Index = ({vendors}) => {
 
   useEffect(() => {
     getVendors();
-  });
+  }, []);
 
   const lastVendor = currentPage*vendorsPerPage;
   const firstVendor = lastVendor - vendorsPerPage;
