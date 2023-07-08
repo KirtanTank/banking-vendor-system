@@ -23,6 +23,7 @@ const VendorComp = () => {
             name,
             zipCode
         }
+        // console.log(VendorPayload);
         // Send Data to Server
         await fetch(`/api/addVendors`, {
             method: 'POST',
@@ -30,11 +31,7 @@ const VendorComp = () => {
             headers: {
                 'Content-type': 'application/json; charset=UTF-8',
             },
-        }).then((res) => {
-            console.log({res});
-          }).catch((err) => {
-            console.log({err});
-          });
+        });
         setAccNo("")
         setAddress1("")
         setAddress2("")
