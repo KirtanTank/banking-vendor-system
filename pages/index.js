@@ -4,8 +4,8 @@ import { useState } from 'react';
 import Pagination from '../components/Pagination';
 
 var arr = [];
-var vendors = undefined;
 const Index = () => {
+  var vendors;
   const [_id, setId] = useState("");
   const [name, setName] = useState("");
   const [bankName, setBankName] = useState("");
@@ -23,10 +23,7 @@ const Index = () => {
 
   // GET request
   const getVendors = async () => {
-    await fetch('https://astonishing-sherbet-d606e1.netlify.app/api/getVendors')
-    .then((result) => result.json())
-    .then((resp) => console.log(resp))
-    .catch((err) => console.log(err));
+    vendors = await fetch(`https://astonishing-sherbet-d606e1.netlify.app/api/getVendors`);
   }
   window.onload(getVendors());
 
@@ -102,8 +99,6 @@ const Index = () => {
     setShow(false);
     window.location.reload(true);
   }
-
-
 
   const lastVendor = currentPage*vendorsPerPage;
   const firstVendor = lastVendor - vendorsPerPage;
