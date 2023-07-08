@@ -24,14 +24,8 @@ const Index = ({ vendors }) => {
 
   // GEt request
   const getVendors = async () => {
-    await fetch('https://astonishing-sherbet-d606e1.netlify.app/api/getVendors', {
-      method: 'GET',
-      headers: {
-      'Content-type': 'application/json; charset=UTF-8'
-      },
-    })
-    .then((res) => res.json())
-    .then((resp) => vendors = resp)
+    await fetch('https://astonishing-sherbet-d606e1.netlify.app/api/getVendors')
+    .then((result) => result.json().then((resp) => console.log(resp)))
     .catch((err) => console.log(err));
   }
   window.onload(getVendors());
