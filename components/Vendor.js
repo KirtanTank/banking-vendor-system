@@ -25,7 +25,7 @@ const VendorComp = () => {
         }
         // console.log(VendorPayload);
         // Send Data to Server
-        await fetch(`https://banking-vendor-system.vercel.app/api/addVendors`, {
+        await fetch(`https://astonishing-sherbet-d606e1.netlify.app/api/addVendors`, {
             method: 'POST',
             body: JSON.stringify(VendorPayload),
             headers: {

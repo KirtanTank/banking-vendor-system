@@ -5,7 +5,7 @@ import Pagination from '../components/Pagination';
 
 var arr = [];
 const Index = ({ vendors }) => {
-  // console.log(vendors);
+  console.log(vendors);
 
   const [_id, setId] = useState("");
   const [name, setName] = useState("");
@@ -22,12 +22,26 @@ const Index = ({ vendors }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [vendorsPerPage] = useState(10);
 
+  // GEt request
+  const getVendors = async () => {
+    await fetch('https://astonishing-sherbet-d606e1.netlify.app/api/getVendors', {
+      method: 'GET',
+      headers: {
+      'Content-type': 'application/json; charset=UTF-8'
+      },
+    })
+    .then((res) => res.json())
+    .then((resp) => vendors = resp)
+    .catch((err) => console.log(err));
+  }
+  window.onload(getVendors());
+
   // Delete Request
   const deleteVendor = async (id) => {
     // console.log(id);
     let conf = confirm("Are You Sure?");
     if (conf) {
-      const resp = await fetch(`https://banking-vendor-system.vercel.app/api/deleteVendors?id=${id}`, {
+      const resp = await fetch(`https://astonishing-sherbet-d606e1.netlify.app/api/deleteVendors?id=${id}`, {
         method: 'DELETE',
         headers: {
           'Content-type': 'application/json; charset=UTF-8',
@@ -80,7 +94,7 @@ const Index = ({ vendors }) => {
     }
     // console.log(newPayload);
     //Update Request
-    await fetch(`https://banking-vendor-system.vercel.app/api/updateVendors`, {
+    await fetch(`https://astonishing-sherbet-d606e1.netlify.app/api/updateVendors`, {
       method: 'POST',
       body: JSON.stringify(newPayload),
       headers: {
@@ -94,6 +108,8 @@ const Index = ({ vendors }) => {
     setShow(false);
     window.location.reload(true);
   }
+
+
 
   const lastVendor = currentPage*vendorsPerPage;
   const firstVendor = lastVendor - vendorsPerPage;
@@ -181,16 +197,16 @@ const Index = ({ vendors }) => {
   );
 }
 
-export const getServerSideProps = async () => {
-  if (!mongoose.connections[0].readyState) {
-    await mongoose.connect(process.env.MONGO_URI);
-  }
-  let res = await Vendor.find();
-  // console.log(res);
-  return {
-    props: { vendors: JSON.parse(JSON.stringify(res)) },
-  }
-}
+// export const getServerSideProps = async () => {
+//   if (!mongoose.connections[0].readyState) {
+//     await mongoose.connect(process.env.MONGO_URI);
+//   }
+//   let res = await Vendor.find();
+//   // console.log(res);
+//   return {
+//     props: { vendors: JSON.parse(JSON.stringify(res)) },
+//   }
+// }
 
 
 export default Index;
