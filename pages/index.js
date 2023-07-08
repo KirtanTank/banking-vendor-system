@@ -1,6 +1,6 @@
 import Vendor from "../models/Vendor";
 import mongoose from "mongoose";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Pagination from '../components/Pagination';
 
 var arr = [];
@@ -95,6 +95,20 @@ const Index = ({vendors}) => {
     window.location.reload(true);
   }
 
+  const getVendors = async () => {
+    await fetch(`/api/getVendors`)
+    .then(res => {return res.json()})
+    .then(data => {
+      vendors = data;
+      console.log(data);
+    })
+    .catch(err => console.log(err));
+  }
+
+  useEffect(() => {
+    getVendors();
+  });
+
   const lastVendor = currentPage*vendorsPerPage;
   const firstVendor = lastVendor - vendorsPerPage;
   const currentVendors = vendors.slice(firstVendor, lastVendor);
@@ -181,15 +195,15 @@ const Index = ({vendors}) => {
   );
 }
 
-export const getServerSideProps = async () => {
-  if (!mongoose.connections[0].readyState) {
-    await mongoose.connect("mongodb://127.0.0.1/MyVendorData");
-  }
-  let res = await Vendor.find();
-  return {
-    props: { vendors: JSON.parse(JSON.stringify(res)) },
-  }
-}
+// export const getServerSideProps = async () => {
+//   if (!mongoose.connections[0].readyState) {
+//     await mongoose.connect("mongodb://127.0.0.1/MyVendorData");
+//   }
+//   let res = await Vendor.find();
+//   return {
+//     props: { vendors: JSON.parse(JSON.stringify(res)) },
+//   }
+// }
 
 
 export default Index;
