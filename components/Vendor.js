@@ -31,7 +31,11 @@ const VendorComp = () => {
             headers: {
                 'Content-type': 'application/json; charset=UTF-8',
             },
-        });
+        }).then((res) => {
+            console.log('success: '+ res);
+          }).catch((err) => {
+            console.log('error: '+ err);
+          });
         setAccNo("")
         setAddress1("")
         setAddress2("")

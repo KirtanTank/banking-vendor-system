@@ -28,7 +28,14 @@ const Index = ({ vendors }) => {
     let conf = confirm("Are You Sure?");
     if (conf) {
       const resp = await fetch(`https://banking-vendor-system.vercel.app/api/deleteVendors?id=${id}`, {
-        method: 'DELETE'
+        method: 'DELETE',
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+        },
+      }).then((res) => {
+        console.log('success: '+ res);
+      }).catch((err) => {
+        console.log('error: '+ err);
       });
     }
     window.location.reload(true);
@@ -79,6 +86,10 @@ const Index = ({ vendors }) => {
       headers: {
         'Content-type': 'application/json; charset=UTF-8',
       },
+    }).then((res) => {
+      console.log('success: '+ res);
+    }).catch((err) => {
+      console.log('error: '+ err);
     });
     setShow(false);
     window.location.reload(true);
