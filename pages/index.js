@@ -29,7 +29,6 @@ const Index = () => {
 
   // Delete Request
   const deleteVendor = async (id) => {
-    // console.log(id);
     let conf = confirm("Are You Sure?");
     if (conf) {
       const resp = await fetch(`https://astonishing-sherbet-d606e1.netlify.app/api/deleteVendors?id=${id}`, {
