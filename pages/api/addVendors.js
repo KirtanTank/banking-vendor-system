@@ -15,4 +15,6 @@ const handler = async (req, res) => {
 
 }
 
+mongoose.disconnect();
+
 export default connectDb(handler);

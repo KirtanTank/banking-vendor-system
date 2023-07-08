@@ -3,7 +3,6 @@ import connectDb from '../../middleware/mongoose';
 
 const handler = async (req, res) => {
     if(req.method == 'POST'){
-        // console.log(req.body);
         let v = await Vendor.findByIdAndUpdate(req.body._id, req.body);
         res.status(200).json({ updated: "success" })
     }
@@ -13,6 +12,6 @@ const handler = async (req, res) => {
     }
 
 }
-
+mongoose.disconnect();
 export default connectDb(handler);
   
