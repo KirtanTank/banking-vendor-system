@@ -186,7 +186,6 @@ export const getServerSideProps = async () => {
     await mongoose.connect(process.env.MONGO_URI);
   }
   let res = await Vendor.find();
-  // console.log(res);
   return {
     props: { vendors: JSON.parse(JSON.stringify(res)) },
   }

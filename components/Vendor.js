@@ -23,7 +23,6 @@ const VendorComp = () => {
             name,
             zipCode
         }
-        // console.log(VendorPayload);
         // Send Data to Server
         await fetch(`/api/addVendors`, {
             method: 'POST',
