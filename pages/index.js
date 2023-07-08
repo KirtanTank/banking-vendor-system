@@ -183,7 +183,7 @@ const Index = ({vendors}) => {
 
 export const getStaticProps = async () => {
   if (!mongoose.connections[0].readyState) {
-    await mongoose.connect(process.env.MONGO_URI);
+    await mongoose.connect("mongodb://127.0.0.1/MyVendorData");
   }
   let res = await Vendor.find();
   return {
