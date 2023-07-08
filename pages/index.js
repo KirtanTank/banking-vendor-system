@@ -21,7 +21,7 @@ const Index = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [vendorsPerPage] = useState(10);
 
-  // GEt request
+  // GET request
   const getVendors = async () => {
     await fetch('https://astonishing-sherbet-d606e1.netlify.app/api/getVendors')
     .then((result) => result.json())
