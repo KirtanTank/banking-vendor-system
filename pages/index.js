@@ -33,9 +33,9 @@ const Index = ({vendors}) => {
           'Content-type': 'application/json; charset=UTF-8',
         },
       }).then((res) => {
-        console.log('success: '+ res);
+        console.log({res});
       }).catch((err) => {
-        console.log('error: '+ err);
+        console.log({err});
       });
     }
     window.location.reload(true);
@@ -87,9 +87,9 @@ const Index = ({vendors}) => {
         'Content-type': 'application/json; charset=UTF-8',
       },
     }).then((res) => {
-      console.log('success: '+ res);
+      console.log({res});
     }).catch((err) => {
-      console.log('error: '+ err);
+      console.log({err});
     });
     setShow(false);
     window.location.reload(true);
