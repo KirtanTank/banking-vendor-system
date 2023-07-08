@@ -23,8 +23,9 @@ const Index = () => {
 
   // GEt request
   const getVendors = async () => {
-    vendors = await fetch('https://astonishing-sherbet-d606e1.netlify.app/api/getVendors')
-    .then((result) => result.json().then((resp) => console.log(resp)))
+    await fetch('https://astonishing-sherbet-d606e1.netlify.app/api/getVendors')
+    .then((result) => result.json())
+    .then((resp) => console.log(resp))
     .catch((err) => console.log(err));
   }
   window.onload(getVendors());
