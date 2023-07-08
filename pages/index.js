@@ -5,7 +5,17 @@ import Pagination from '../components/Pagination';
 
 var arr = [];
 const Index = ({vendors}) => {
-  
+
+  const getVendors = async () => {
+    await fetch(`/api/getVendors`)
+    .then(data => {return {vendors: JSON.parse(JSON.stringify(data))}})
+    .catch(err => console.log(err));
+  }
+
+  useEffect(() => {
+    getVendors();
+  }, []);
+
   const [_id, setId] = useState("");
   const [name, setName] = useState("");
   const [bankName, setBankName] = useState("");
@@ -20,8 +30,6 @@ const Index = ({vendors}) => {
   const [totalVendors] = useState(vendors.length);
   const [currentPage, setCurrentPage] = useState(1);
   const [vendorsPerPage] = useState(10);
-
-  
 
   // Delete Request
   const deleteVendor = async (id) => {
@@ -94,20 +102,6 @@ const Index = ({vendors}) => {
     setShow(false);
     window.location.reload(true);
   }
-
-  const getVendors = async () => {
-    await fetch(`/api/getVendors`)
-    .then(res => {return res.json()})
-    .then(data => {
-      vendors = data;
-      console.log(data);
-    })
-    .catch(err => console.log(err));
-  }
-
-  useEffect(() => {
-    getVendors();
-  }, []);
 
   const lastVendor = currentPage*vendorsPerPage;
   const firstVendor = lastVendor - vendorsPerPage;
