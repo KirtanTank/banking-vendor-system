@@ -181,7 +181,7 @@ const Index = ({vendors}) => {
   );
 }
 
-export const getServerSideProps = async () => {
+export const getStaticProps = async () => {
   if (!mongoose.connections[0].readyState) {
     await mongoose.connect(process.env.MONGO_URI);
   }
