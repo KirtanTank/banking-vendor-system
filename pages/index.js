@@ -10,12 +10,12 @@ const getVendors = async () => {
   .catch(err => console.log(err));
 }
 
-useEffect(() => {
-  getVendors();
-}, []);
 
 const Index = ({vendors}) => {
-
+  useEffect(() => {
+    getVendors();
+  }, []);
+  
   const [_id, setId] = useState("");
   const [name, setName] = useState("");
   const [bankName, setBankName] = useState("");
