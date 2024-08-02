@@ -1,10 +1,13 @@
-import Vendor from '../../models/Vendor';
-import connectDb from '../../middleware/mongoose';
+import Vendor from "../../models/Vendor";
+import connectDb from "../../middleware/mongoose";
 
 const handler = async (req, res) => {
-    let vendors = Vendor.find();
-    // console.log(vendors);
-    res.status(200).json({ vendors })
-}
+  if (req.method == "GET") {
+    let vendors = await Vendor.find();
+    res.status(200).json({ vendors });
+  } else {
+    res.status(400).json({ error: "This method is not allowed" });
+  }
+};
+
 export default connectDb(handler);
-  
