@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const VendorComp = () => {
   const [name, setName] = useState("");
@@ -9,9 +11,29 @@ const VendorComp = () => {
   const [city, setCity] = useState("");
   const [zipCode, setZipCode] = useState("");
   const [country, setCountry] = useState("");
+  const [inputError, setInputError] = useState({});
+
+  const validateInput = () => {
+    const newErrors = {};
+    if (accNo.length !== 12) {
+      newErrors.accNo = "Account number must be exactly 12 digits.";
+    }
+    if (zipCode.length > 10) {
+      newErrors.zipCode = "Zip code must be less than 10 digits.";
+    }
+
+    setInputError(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!validateInput()) {
+      toast("Please fix the inputError before submitting", { type: "error" });
+      return;
+    }
+
     const VendorPayload = {
       accNo,
       address1,
@@ -30,7 +52,16 @@ const VendorComp = () => {
       headers: {
         "Content-type": "application/json; charset=UTF-8",
       },
-    });
+    })
+      .then((res) => {
+        if (res) {
+          toast("Vendor created successfully", { type: "success" });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        toast("Sorry, could not create", { type: "error" });
+      });
     setAccNo("");
     setAddress1("");
     setAddress2("");
@@ -74,7 +105,10 @@ const VendorComp = () => {
             <input
               type="number"
               value={accNo}
-              onChange={({ target }) => setAccNo(target.value)}
+              onChange={({ target }) => {
+                setAccNo(target.value);
+                setInputError({ ...inputError, accNo: "" });
+              }}
               cols="30"
               rows="8"
               className="border-solid border-gray-400 border-2 p-3 md:text-xl w-full rounded-md"
@@ -82,10 +116,16 @@ const VendorComp = () => {
               placeholder="Bank Account Number"
               required
             />
+            <span>
+              {inputError.accNo && (
+                <p className="text-red-500">{inputError.accNo}</p>
+              )}
+            </span>
           </div>
 
           <div className="col-span-2">
             <input
+              type="text"
               cols="30"
               rows="8"
               value={address1}
@@ -99,6 +139,7 @@ const VendorComp = () => {
 
           <div className="col-span-2">
             <input
+              type="text"
               cols="30"
               rows="8"
               value={address2}
@@ -125,16 +166,25 @@ const VendorComp = () => {
             <input
               type="number"
               value={zipCode}
-              onChange={({ target }) => setZipCode(target.value)}
+              onChange={({ target }) => {
+                setZipCode(target.value);
+                setInputError({ ...inputError, zipCode: "" });
+              }}
               className="border-solid border-gray-400 border-2 p-3 md:text-xl w-full rounded-md"
               id="zip"
               placeholder="ZipCode"
               required
             />
+            <span>
+              {inputError.zipCode && (
+                <p className="text-red-500">{inputError.zipCode}</p>
+              )}
+            </span>
           </div>
 
           <div className="col-span-2">
             <input
+              type="text"
               cols="30"
               rows="8"
               value={country}
@@ -157,6 +207,17 @@ const VendorComp = () => {
           </div>
         </div>
       </form>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover={false}
+      />
     </div>
   );
 };

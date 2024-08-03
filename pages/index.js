@@ -3,6 +3,8 @@ import Pagination from "../components/Pagination";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import EditVendorModal from "../components/EditVendorModal";
+import VendorCard from "../components/VendorCard";
+import DeleteVendorModal from "../components/DeleteVendorModal";
 
 var updatedDetailsOfVendors = [];
 const Index = () => {
@@ -22,6 +24,9 @@ const Index = () => {
   const [totalVendors, setTotalVendors] = useState(vendors.length);
   const [currentPage, setCurrentPage] = useState(1);
   const [vendorsPerPage] = useState(10);
+
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [vendorToBeDelete, setVendorToBeDelete] = useState("");
 
   useEffect(() => {
     fetchVendors();
@@ -47,78 +52,24 @@ const Index = () => {
     }
   };
 
-  // Delete Request
-  const deleteVendor = async (id) => {
-    let conf = confirm("Are You Sure?");
-    if (conf) {
-      const resp = await fetch(`/api/deleteVendors?id=${id}`, {
-        method: "DELETE",
-      });
-      if (resp) {
-        toast("Vendor deleted successfully", { type: "success" });
-      }
-    }
-    fetchVendors();
-  };
-
   const [showEditVendorModal, setShowEditVendorModal] = useState(false);
 
   const editFun = (id) => {
     setShowEditVendorModal(true);
-    for (let i = 0; i < vendors.length; i++) {
-      if (vendors[i]._id == id) {
-        updatedDetailsOfVendors.push(vendors[i]);
-        setId(vendors[i]._id);
-        setName(vendors[i].name);
-        setBankName(vendors[i].bankName);
-        setAccNo(vendors[i].accNo);
-        setAddress1(vendors[i].address1);
-        setAddress2(vendors[i].address2);
-        setCity(vendors[i].city);
-        setZipCode(vendors[i].zipCode);
-        setCountry(vendors[i].country);
-        break;
-      }
+    const selectedVendor = vendors.find((vendor) => vendor._id === id);
+    if (selectedVendor) {
+      updatedDetailsOfVendors = [selectedVendor];
+      setId(selectedVendor._id);
+      setName(selectedVendor.name);
+      setBankName(selectedVendor.bankName);
+      setAccNo(selectedVendor.accNo);
+      setAddress1(selectedVendor.address1);
+      setAddress2(selectedVendor.address2);
+      setCity(selectedVendor.city);
+      setZipCode(selectedVendor.zipCode);
+      setCountry(selectedVendor.country);
     }
   };
-  // const closeModal = () => {
-  //   setShowEditVendorModal(false);
-  //   updatedDetailsOfVendors = [];
-  // };
-
-  // const updateVendor = async (e) => {
-  //   const newPayload = {
-  //     _id,
-  //     accNo,
-  //     address1,
-  //     address2,
-  //     bankName,
-  //     city,
-  //     country,
-  //     name,
-  //     zipCode,
-  //   };
-
-  //   //Update Request
-  //   await fetch(`/api/updateVendors`, {
-  //     method: "POST",
-  //     body: JSON.stringify(newPayload),
-  //     headers: {
-  //       "Content-type": "application/json; charset=UTF-8",
-  //     },
-  //   })
-  //     .then((res) => {
-  //       if (res) {
-  //         toast("Vendor updated Successfully", { type: "success" });
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //       toast("Sorry, could not update", { type: "error" });
-  //     });
-  //   setShowEditVendorModal(false);
-  //   fetchVendors();
-  // };
 
   const lastVendor = currentPage * vendorsPerPage;
   const firstVendor = lastVendor - vendorsPerPage;
@@ -127,203 +78,34 @@ const Index = () => {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
   return (
     <div className="position-relative">
-      <div className="grid grid-cols-4 gap-4 justify-items-center">
-        {currentVendors.map((item) => {
-          return (
-            <div
-              key={item._id}
-              className="w-full items-center content-center max-w-xs bg-white rounded-xl shadow-[0_25px_80px_-5px_rgba(0,0,0,0.4)] dark:bg-gray-800 dark:border-gray-700"
-            >
-              <div className="flex flex-col items-center p-4">
-                <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">
-                  {item.name}
-                </h5>
-                <span className="text-sm text-gray-500 dark:text-gray-400">
-                  {item.bankName}
-                </span>
-                <span className="text-sm text-gray-500 dark:text-gray-400">
-                  {item.accNo}
-                </span>
-                <div className="flex mt-4 space-x-3 md:mt-6">
-                  <button
-                    className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                    onClick={() => editFun(item._id)}
-                  >
-                    Edit
-                  </button>
-
-                  <button
-                    className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-700 dark:focus:ring-gray-700"
-                    onClick={() => deleteVendor(item._id)}
-                  >
-                    Delete
-                  </button>
-                </div>
-              </div>
-            </div>
-          );
-        })}
-      </div>
+      <VendorCard
+        editFun={editFun}
+        currentVendors={currentVendors}
+        setOpenDeleteModal={setOpenDeleteModal}
+        setVendorToBeDelete={setVendorToBeDelete}
+      />
 
       {showEditVendorModal && (
-        // <div className="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex justify-center items-center">
-        //   {updatedDetailsOfVendors.map((ele) => {
-        //     return (
-        //       <div
-        //         key={ele._id}
-        //         className="max-w-2xl bg-blue-700 px-5 m-auto w-fit p-5 rounded-lg"
-        //       >
-        //         <div className="text-3xl mb-6 text-center text-white">
-        //           Edit Vendor Details
-        //         </div>
-        //         <form>
-        //           <div className="grid grid-cols-2 gap-4 max-w-xl m-auto">
-        //             <div className="col-span-2 lg:col-span-1">
-        //               <input
-        //                 type="text"
-        //                 className="border-solid border-gray-400 border-2 p-3 md:text-xl w-full rounded-md"
-        //                 id="vendorName"
-        //                 placeholder="Vendor Name"
-        //                 value={name}
-        //                 onChange={(e) => setName(e.target.value)}
-        //                 required
-        //               />
-        //             </div>
-
-        //             <div className="col-span-2 lg:col-span-1">
-        //               <input
-        //                 type="text"
-        //                 className="border-solid border-gray-400 border-2 p-3 md:text-xl w-full rounded-md"
-        //                 id="bankName"
-        //                 placeholder="Bank Name"
-        //                 value={bankName}
-        //                 onChange={(e) => setBankName(e.target.value)}
-        //                 required
-        //               />
-        //             </div>
-
-        //             <div className="col-span-2">
-        //               <input
-        //                 type="number"
-        //                 cols="30"
-        //                 rows="8"
-        //                 className="border-solid border-gray-400 border-2 p-3 md:text-xl w-full rounded-md"
-        //                 id="accNumber"
-        //                 placeholder="Bank Account Number"
-        //                 value={accNo}
-        //                 onChange={(e) => setAccNo(e.target.value)}
-        //                 required
-        //               />
-        //             </div>
-
-        //             <div className="col-span-2">
-        //               <input
-        //                 cols="30"
-        //                 rows="8"
-        //                 className="border-solid border-gray-400 border-2 p-3 md:text-xl w-full rounded-md"
-        //                 id="address1"
-        //                 placeholder="Address Line 1"
-        //                 value={address1}
-        //                 onChange={(e) => setAddress1(e.target.value)}
-        //                 required
-        //               />
-        //             </div>
-
-        //             <div className="col-span-2">
-        //               <input
-        //                 cols="30"
-        //                 rows="8"
-        //                 className="border-solid border-gray-400 border-2 p-3 md:text-xl w-full rounded-md"
-        //                 id="address2"
-        //                 placeholder="Address Line 2"
-        //                 value={address2}
-        //                 onChange={(e) => setAddress2(e.target.value)}
-        //               />
-        //             </div>
-
-        //             <div className="col-span-2 lg:col-span-1">
-        //               <input
-        //                 type="text"
-        //                 className="border-solid border-gray-400 border-2 p-3 md:text-xl w-full rounded-md"
-        //                 id="city"
-        //                 placeholder="City"
-        //                 value={city}
-        //                 onChange={(e) => setCity(e.target.value)}
-        //                 required
-        //               />
-        //             </div>
-
-        //             <div className="col-span-2 lg:col-span-1">
-        //               <input
-        //                 type="number"
-        //                 className="border-solid border-gray-400 border-2 p-3 md:text-xl w-full rounded-md"
-        //                 id="zip"
-        //                 placeholder="ZipCode"
-        //                 value={zipCode}
-        //                 onChange={(e) => setZipCode(e.target.value)}
-        //                 required
-        //               />
-        //             </div>
-
-        //             <div className="col-span-2">
-        //               <input
-        //                 cols="30"
-        //                 rows="8"
-        //                 className="border-solid border-gray-400 border-2 p-3 md:text-xl w-full rounded-md"
-        //                 id="country"
-        //                 placeholder="Country"
-        //                 value={country}
-        //                 onChange={(e) => setCountry(e.target.value)}
-        //                 required
-        //               />
-        //             </div>
-
-        //             <div className="col-span-2"></div>
-        //             <div className="col-span-2 lg:col-span-1">
-        //               <button
-        //                 type="button"
-        //                 className="py-3 px-6 rounded-md bg-green-500 text-white font-bold w-full sm:w-32"
-        //                 onClick={() => closeModal()}
-        //               >
-        //                 CANCEL
-        //               </button>
-        //             </div>
-
-        //             <div className="col-span-2 lg:col-span-1">
-        //               <button
-        //                 type="button"
-        //                 className="py-3 px-6 rounded-md bg-green-500 text-white font-bold w-full sm:w-32"
-        //                 onClick={() => updateVendor()}
-        //               >
-        //                 EDIT
-        //               </button>
-        //             </div>
-        //           </div>
-        //         </form>
-        //       </div>
-        //     );
-        //   })}
-        // </div>
         <EditVendorModal
-          setShowEditVendorModal={setShowEditVendorModal}
           _id={_id}
           accNo={accNo}
-          address1={address1}
-          address2={address2}
-          bankName={bankName}
-          city={city}
-          country={country}
-          name={name}
-          zipCode={zipCode}
-          updatedDetailsOfVendors={updatedDetailsOfVendors}
           setAccNo={setAccNo}
+          address1={address1}
           setAddress1={setAddress1}
+          address2={address2}
           setAddress2={setAddress2}
+          bankName={bankName}
           setBankName={setBankName}
+          city={city}
           setCity={setCity}
+          country={country}
           setCountry={setCountry}
+          name={name}
           setName={setName}
+          zipCode={zipCode}
           setZipCode={setZipCode}
+          updatedDetailsOfVendors={updatedDetailsOfVendors}
+          setShowEditVendorModal={setShowEditVendorModal}
           fetchVendors={fetchVendors}
         />
       )}
@@ -335,7 +117,24 @@ const Index = () => {
           paginate={paginate}
         />
       </div>
-      <ToastContainer />
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover={false}
+      />
+      <DeleteVendorModal
+        openDeleteModal={openDeleteModal}
+        setOpenDeleteModal={setOpenDeleteModal}
+        fetchVendors={fetchVendors}
+        vendorToBeDelete={vendorToBeDelete}
+        toast={toast}
+      />
     </div>
   );
 };
