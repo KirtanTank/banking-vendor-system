@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import LogBtn from "./LogBtn";
-import logo from "../public/logo.png";
+import logo from "../public/Logo.png";
 import Image from "next/image";
 
 const Navbar = () => {
