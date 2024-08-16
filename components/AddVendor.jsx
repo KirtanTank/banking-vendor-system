@@ -1,24 +1,41 @@
 import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useSession } from 'next-auth/react'; 
 
 const VendorComp = () => {
-  const [name, setName] = useState("");
-  const [bankName, setBankName] = useState("");
-  const [accNo, setAccNo] = useState("");
-  const [address1, setAddress1] = useState("");
-  const [address2, setAddress2] = useState("");
-  const [city, setCity] = useState("");
-  const [zipCode, setZipCode] = useState("");
-  const [country, setCountry] = useState("");
+  const [formData, setFormData] = useState({
+    name: "",
+    bankName: "",
+    accNo: "",
+    address1: "",
+    address2: "",
+    city: "",
+    zipCode: "",
+    country: "",
+  });
+
   const [inputError, setInputError] = useState({});
+  const { data: session } = useSession();
+  const userId = session?.userId;
+
+  const handleChange = ({ target: { name, value } }) => {
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+    setInputError({
+      ...inputError,
+      [name]: "",
+    });
+  };
 
   const validateInput = () => {
     const newErrors = {};
-    if (accNo.length !== 12) {
+    if (formData.accNo.length !== 12) {
       newErrors.accNo = "Account number must be exactly 12 digits.";
     }
-    if (zipCode.length > 10) {
+    if (formData.zipCode.length > 10) {
       newErrors.zipCode = "Zip code must be less than 10 digits.";
     }
 
@@ -30,19 +47,14 @@ const VendorComp = () => {
     e.preventDefault();
 
     if (!validateInput()) {
-      toast("Please fix the inputError before submitting", { type: "error" });
+      toast("Please fix the errors before submitting", { type: "error" });
       return;
     }
 
+    // Add userId to formData
     const VendorPayload = {
-      accNo,
-      address1,
-      address2,
-      bankName,
-      city,
-      country,
-      name,
-      zipCode,
+      ...formData,
+      userId,
     };
 
     // Send Data to Server
@@ -54,34 +66,40 @@ const VendorComp = () => {
       },
     })
       .then((res) => {
-        if (res) {
+        if (res.ok) {
           toast("Vendor created successfully", { type: "success" });
+        } else {
+          throw new Error("Network response was not ok.");
         }
       })
       .catch((err) => {
-        console.log(err);
-        toast("Sorry, could not create", { type: "error" });
+        console.log("Error: ", err);
+        toast("Sorry, could not create vendor", { type: "error" });
       });
-    setAccNo("");
-    setAddress1("");
-    setAddress2("");
-    setBankName("");
-    setCity("");
-    setCountry("");
-    setName("");
-    setZipCode("");
+
+    setFormData({
+      name: "",
+      bankName: "",
+      accNo: "",
+      address1: "",
+      address2: "",
+      city: "",
+      zipCode: "",
+      country: "",
+    });
   };
 
   return (
-    <div className="max-w-2xl bg-white px-5 m-auto w-full mt-10">
+    <div className="max-w-2xl px-5 m-auto w-full mt-10">
       <div className="text-3xl mb-6 text-center ">Create New Vendor</div>
-      <form>
+      <form onSubmit={handleSubmit}>
         <div className="grid grid-cols-2 gap-4 max-w-xl m-auto">
           <div className="col-span-2 lg:col-span-1">
             <input
               type="text"
-              value={name}
-              onChange={({ target }) => setName(target.value)}
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
               className="border-solid border-gray-400 border-2 p-3 md:text-xl w-full rounded-md"
               id="vendorName"
               placeholder="Vendor Name"
@@ -92,8 +110,9 @@ const VendorComp = () => {
           <div className="col-span-2 lg:col-span-1">
             <input
               type="text"
-              value={bankName}
-              onChange={({ target }) => setBankName(target.value)}
+              name="bankName"
+              value={formData.bankName}
+              onChange={handleChange}
               className="border-solid border-gray-400 border-2 p-3 md:text-xl w-full rounded-md"
               id="bankName"
               placeholder="Bank Name"
@@ -104,32 +123,25 @@ const VendorComp = () => {
           <div className="col-span-2">
             <input
               type="number"
-              value={accNo}
-              onChange={({ target }) => {
-                setAccNo(target.value);
-                setInputError({ ...inputError, accNo: "" });
-              }}
-              cols="30"
-              rows="8"
+              name="accNo"
+              value={formData.accNo}
+              onChange={handleChange}
               className="border-solid border-gray-400 border-2 p-3 md:text-xl w-full rounded-md"
               id="accNumber"
               placeholder="Bank Account Number"
               required
             />
-            <span>
-              {inputError.accNo && (
-                <p className="text-red-500">{inputError.accNo}</p>
-              )}
-            </span>
+            {inputError.accNo && (
+              <p className="text-red-500">{inputError.accNo}</p>
+            )}
           </div>
 
           <div className="col-span-2">
             <input
               type="text"
-              cols="30"
-              rows="8"
-              value={address1}
-              onChange={({ target }) => setAddress1(target.value)}
+              name="address1"
+              value={formData.address1}
+              onChange={handleChange}
               className="border-solid border-gray-400 border-2 p-3 md:text-xl w-full rounded-md"
               id="address1"
               placeholder="Address Line 1"
@@ -140,10 +152,9 @@ const VendorComp = () => {
           <div className="col-span-2">
             <input
               type="text"
-              cols="30"
-              rows="8"
-              value={address2}
-              onChange={({ target }) => setAddress2(target.value)}
+              name="address2"
+              value={formData.address2}
+              onChange={handleChange}
               className="border-solid border-gray-400 border-2 p-3 md:text-xl w-full rounded-md"
               id="address2"
               placeholder="Address Line 2"
@@ -153,8 +164,9 @@ const VendorComp = () => {
           <div className="col-span-2 lg:col-span-1">
             <input
               type="text"
-              value={city}
-              onChange={({ target }) => setCity(target.value)}
+              name="city"
+              value={formData.city}
+              onChange={handleChange}
               className="border-solid border-gray-400 border-2 p-3 md:text-xl w-full rounded-md"
               id="city"
               placeholder="City"
@@ -165,30 +177,25 @@ const VendorComp = () => {
           <div className="col-span-2 lg:col-span-1">
             <input
               type="number"
-              value={zipCode}
-              onChange={({ target }) => {
-                setZipCode(target.value);
-                setInputError({ ...inputError, zipCode: "" });
-              }}
+              name="zipCode"
+              value={formData.zipCode}
+              onChange={handleChange}
               className="border-solid border-gray-400 border-2 p-3 md:text-xl w-full rounded-md"
               id="zip"
               placeholder="ZipCode"
               required
             />
-            <span>
-              {inputError.zipCode && (
-                <p className="text-red-500">{inputError.zipCode}</p>
-              )}
-            </span>
+            {inputError.zipCode && (
+              <p className="text-red-500">{inputError.zipCode}</p>
+            )}
           </div>
 
           <div className="col-span-2">
             <input
               type="text"
-              cols="30"
-              rows="8"
-              value={country}
-              onChange={({ target }) => setCountry(target.value)}
+              name="country"
+              value={formData.country}
+              onChange={handleChange}
               className="border-solid border-gray-400 border-2 p-3 md:text-xl w-full rounded-md"
               id="country"
               placeholder="Country"
@@ -198,9 +205,8 @@ const VendorComp = () => {
 
           <div className="col-span-2 text-right">
             <button
-              className="py-3 px-6  rounded-md bg-green-500 text-white font-bold w-full sm:w-32"
+              className="py-3 px-6 rounded-md bg-green-500 text-white font-bold w-full sm:w-32"
               type="submit"
-              onClick={handleSubmit}
             >
               CREATE
             </button>

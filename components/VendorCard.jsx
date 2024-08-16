@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import NoDataFound from "./NoDataFound";
 
 const VendorCard = ({
   editFun,
@@ -17,63 +18,62 @@ const VendorCard = ({
   };
 
   const maskAccountNumber = (accNo) => {
-    return accNo.replace(/.(?=.{4})/g, "*");
+    const masked = accNo.replace(/.(?=.{4})/g, "*");
+    const formatted = masked.replace(/(.{4})/g, "$1 ");
+    return formatted.trim();
   };
 
   return (
     <>
-      <div className="grid grid-cols-3 gap-6 justify-items-center px-16">
-        {currentVendors.map((item) => {
-          const isVisible = visibleAccounts[item._id];
-          return (
-            <div
-              key={item._id}
-              className="w-full items-center content-center max-w-sm bg-white rounded-xl shadow-[0_25px_80px_-5px_rgba(0,0,0,0.2)] dark:bg-gray-800 dark:border-gray-700"
-            >
-              <div className="flex flex-col items-center p-4">
-                <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">
-                  {item.name}
-                </h5>
-                <span className="text-sm text-gray-500 dark:text-gray-400">
-                  {item.bankName}
-                </span>
-                <div className="flex items-center space-x-2">
-                  <span className="text-sm text-gray-500 dark:text-gray-400">
-                    {isVisible ? item.accNo : maskAccountNumber(item.accNo)}
+      <div
+        className={`flex flex-wrap justify-center gap-20 text-center`}
+      >
+        {currentVendors.length === 0 ? (
+          <NoDataFound />
+        ) : (
+          currentVendors.map((item) => {
+            const isVisible = visibleAccounts[item._id];
+            return (
+              <div key={item._id} className="vendor-card">
+                <div className="flex flex-col items-center p-4">
+                  <h5 className="mb-1 text-3xl font-medium text-[#EEEEEE] dark:text-white">
+                    {item.name}
+                  </h5>
+                  <span className="text-xl">{item.bankName}</span>
+                  <div className="flex items-center space-x-2">
+                    <span className="text-lg">
+                      {isVisible ? item.accNo : maskAccountNumber(item.accNo)}
+                    </span>
+                    <span onClick={() => toggleVisibility(item._id)}>
+                      {isVisible ? <FaEyeSlash /> : <FaEye />}
+                    </span>
+                  </div>
+                  <span className="text-md">
+                    {item.city}, {item.country} - {item.zipCode}
                   </span>
-                  <button onClick={() => toggleVisibility(item._id)}>
-                    {isVisible ? (
-                      <FaEyeSlash className="h-5 w-5 text-gray-500 dark:text-gray-400" />
-                    ) : (
-                      <FaEye className="h-5 w-5 text-gray-500 dark:text-gray-400" />
-                    )}
-                  </button>
-                </div>
-                <span className="text-sm text-gray-500 dark:text-gray-400">
-                  {item.city}, {item.country} - {item.zipCode}
-                </span>
-                <div className="flex mt-4 space-x-3 md:mt-6">
-                  <button
-                    className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                    onClick={() => editFun(item._id)}
-                  >
-                    Edit
-                  </button>
+                  <div className="flex mt-4 space-x-3 md:mt-6">
+                    <button
+                      className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-[#000000] hover:text-[#FFFFFF] rounded-lg focus:ring-4 focus:outline-none"
+                      onClick={() => editFun(item._id)}
+                    >
+                      Edit
+                    </button>
 
-                  <button
-                    className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-700 dark:focus:ring-gray-700"
-                    onClick={() => {
-                      setVendorToBeDelete(item._id);
-                      setOpenDeleteModal(true);
-                    }}
-                  >
-                    Delete
-                  </button>
+                    <button
+                      className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-[#000000] hover:text-[#FFFFFF] rounded-lg focus:ring-4 focus:outline-none"
+                      onClick={() => {
+                        setVendorToBeDelete(item._id);
+                        setOpenDeleteModal(true);
+                      }}
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })
+        )}
       </div>
     </>
   );
