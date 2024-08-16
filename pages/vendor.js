@@ -1,4 +1,4 @@
-import VendorComp from "../components/Vendor";
+import VendorComp from "../components/AddVendor";
 
 const Vendor = () => {
     return (

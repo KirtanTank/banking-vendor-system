@@ -3,7 +3,6 @@ import connectDb from '../../middleware/mongoose';
 
 const handler = async (req, res) => {
     if(req.method == 'POST'){
-        // console.log(req.body);
         let v = new Vendor(req.body);
         await v.save();
         res.status(200).json({ success: "success" })

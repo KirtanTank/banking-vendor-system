@@ -5,10 +5,10 @@ import "react-toastify/dist/ReactToastify.css";
 import EditVendorModal from "../components/EditVendorModal";
 import VendorCard from "../components/VendorCard";
 import DeleteVendorModal from "../components/DeleteVendorModal";
+import { useSession } from "next-auth/react";
 
 var updatedDetailsOfVendors = [];
 const Index = () => {
-  // console.log(vendors);
   const [vendors, setVendors] = useState([]);
   const [_id, setId] = useState("");
   const [name, setName] = useState("");
@@ -23,19 +23,23 @@ const Index = () => {
   // Pagination
   const [totalVendors, setTotalVendors] = useState(vendors.length);
   const [currentPage, setCurrentPage] = useState(1);
-  const [vendorsPerPage] = useState(10);
+  const [vendorsPerPage] = useState(6);
 
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [vendorToBeDelete, setVendorToBeDelete] = useState("");
 
+  const { data: session } = useSession();
+  const userId = session?.userId;
+
   useEffect(() => {
+    if(!userId) return;
     fetchVendors();
-  }, []);
+  }, [userId]);
 
   // Get Request
   const fetchVendors = async () => {
     try {
-      const response = await fetch("/api/getVendors", {
+      const response = await fetch(`/api/getVendors?userId=${userId}`, {
         method: "GET",
       });
 
@@ -77,40 +81,39 @@ const Index = () => {
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
   return (
-    <div className="position-relative">
-      <VendorCard
-        editFun={editFun}
-        currentVendors={currentVendors}
-        setOpenDeleteModal={setOpenDeleteModal}
-        setVendorToBeDelete={setVendorToBeDelete}
+    <div className="relative flex flex-col min-h-full">
+        <VendorCard
+          editFun={editFun}
+          currentVendors={currentVendors}
+          setOpenDeleteModal={setOpenDeleteModal}
+          setVendorToBeDelete={setVendorToBeDelete}
+        />
+
+      <EditVendorModal
+        showEditVendorModal={showEditVendorModal}
+        _id={_id}
+        accNo={accNo}
+        setAccNo={setAccNo}
+        address1={address1}
+        setAddress1={setAddress1}
+        address2={address2}
+        setAddress2={setAddress2}
+        bankName={bankName}
+        setBankName={setBankName}
+        city={city}
+        setCity={setCity}
+        country={country}
+        setCountry={setCountry}
+        name={name}
+        setName={setName}
+        zipCode={zipCode}
+        setZipCode={setZipCode}
+        updatedDetailsOfVendors={updatedDetailsOfVendors}
+        setShowEditVendorModal={setShowEditVendorModal}
+        fetchVendors={fetchVendors}
       />
 
-      {showEditVendorModal && (
-        <EditVendorModal
-          _id={_id}
-          accNo={accNo}
-          setAccNo={setAccNo}
-          address1={address1}
-          setAddress1={setAddress1}
-          address2={address2}
-          setAddress2={setAddress2}
-          bankName={bankName}
-          setBankName={setBankName}
-          city={city}
-          setCity={setCity}
-          country={country}
-          setCountry={setCountry}
-          name={name}
-          setName={setName}
-          zipCode={zipCode}
-          setZipCode={setZipCode}
-          updatedDetailsOfVendors={updatedDetailsOfVendors}
-          setShowEditVendorModal={setShowEditVendorModal}
-          fetchVendors={fetchVendors}
-        />
-      )}
-
-      <div className="flex justify-center absolute bottom-0 w-full z-[-10]">
+      <div className="flex justify-center w-full mt-5">
         <Pagination
           vendorsPerPage={vendorsPerPage}
           totalVendors={totalVendors}
