@@ -1,3 +1,99 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Oswald:wght@200..700&display=swap');
+
+/* Vendor Card Container */
+.vendor-card {
+    background-color: #38AF79;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
+    width: 100%;
+    max-width: 350px;
+    transition: transform 0.3s ease;
+  }
+  
+  .vendor-card:hover {
+    transform: scale(105%);
+  }
+  
+  /* Vendor Card Text */
+  .vendor-card h5 {
+    color: #eeeeee;
+  }
+  
+  .vendor-card span {
+    color: #eeeeee;
+  }
+  
+  /* Buttons */
+  .vendor-card button {
+    background-color: #57D6A1;
+    color: #000000;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    max-width: 100%;
+    width: 80px;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .get-started { 
+    background-color: #48bb78;
+    color: #000000;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    max-width: 100%;
+    width: fit-content;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    z-index: 2;
+  }
+  
+  .vendor-card button:hover {
+    background-color: #2e6b31;
+  }
+  
+  .vendor-card button:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(56, 127, 57, 0.4);
+  }
+  
+  /* Flex Container */
+  .vendor-card .flex {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* Vendor Card Layout */
+  .vendor-card .flex-col {
+    flex-direction: column;
+  }
+  
+  .vendor-card .space-x-2 {
+    margin-right: 8px;
+  }
+  
+  .vendor-card .space-x-3 {
+    padding-right: 28px;
+    padding-left: 28px;
+    gap: 15px;
+  }
+  
+  /* Misc */
+  .vendor-card img {
+    max-width: 100%;
+    height: auto;
+  }
+  
+  .no-data-font {
+    font-family: "Inter", sans-serif;
+  }
