@@ -3,7 +3,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useSession } from 'next-auth/react'; 
 
-const VendorComp = () => {
+const AddVendor = () => {
   const [formData, setFormData] = useState({
     name: "",
     bankName: "",
@@ -228,4 +228,4 @@ const VendorComp = () => {
   );
 };
 
-export default VendorComp;
+export default AddVendor;

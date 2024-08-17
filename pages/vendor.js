@@ -1,8 +1,8 @@
-import VendorComp from "../components/AddVendor";
+import AddVendor from "../components/AddVendor";
 
 const Vendor = () => {
     return (
-        <VendorComp />
+        <AddVendor />
      );
 }
  
