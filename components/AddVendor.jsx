@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useSession } from 'next-auth/react'; 
+import { useSession } from "next-auth/react";
 
 const AddVendor = () => {
   const [formData, setFormData] = useState({
@@ -58,9 +58,24 @@ const AddVendor = () => {
     };
 
     // Send Data to Server
+    AddNewVendor(VendorPayload);
+
+    setFormData({
+      name: "",
+      bankName: "",
+      accNo: "",
+      address1: "",
+      address2: "",
+      city: "",
+      zipCode: "",
+      country: "",
+    });
+  };
+
+  const AddNewVendor = async (formData) => {
     await fetch(`/api/addVendors`, {
       method: "POST",
-      body: JSON.stringify(VendorPayload),
+      body: JSON.stringify(formData),
       headers: {
         "Content-type": "application/json; charset=UTF-8",
       },
@@ -76,17 +91,6 @@ const AddVendor = () => {
         console.log("Error: ", err);
         toast("Sorry, could not create vendor", { type: "error" });
       });
-
-    setFormData({
-      name: "",
-      bankName: "",
-      accNo: "",
-      address1: "",
-      address2: "",
-      city: "",
-      zipCode: "",
-      country: "",
-    });
   };
 
   return (
