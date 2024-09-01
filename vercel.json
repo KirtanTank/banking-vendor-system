@@ -1,8 +1,0 @@
-{
-    "functions": {
-      "api/auth": {
-        "maxDuration": 60
-      }
-    }
-  }
-  
