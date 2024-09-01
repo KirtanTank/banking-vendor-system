@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Pagination from "../components/Pagination";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import EditVendorModal from "../components/EditVendorModal";
 import VendorCard from "../components/VendorCard";
@@ -27,6 +27,8 @@ const Index = () => {
 
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [vendorToBeDelete, setVendorToBeDelete] = useState("");
+
+  const [showEditVendorModal, setShowEditVendorModal] = useState(false);
 
   const { data: session } = useSession();
   const userId = session?.userId;
@@ -56,7 +58,6 @@ const Index = () => {
     }
   };
 
-  const [showEditVendorModal, setShowEditVendorModal] = useState(false);
 
   const editFun = (id) => {
     setShowEditVendorModal(true);
@@ -80,6 +81,7 @@ const Index = () => {
   const currentVendors = vendors.slice(firstVendor, lastVendor);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  
   return (
     <div className="relative flex flex-col min-h-full">
         <VendorCard
@@ -120,17 +122,6 @@ const Index = () => {
           paginate={paginate}
         />
       </div>
-      <ToastContainer
-        position="bottom-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover={false}
-      />
       <DeleteVendorModal
         openDeleteModal={openDeleteModal}
         setOpenDeleteModal={setOpenDeleteModal}

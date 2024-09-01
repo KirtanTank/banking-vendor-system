@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useSession } from "next-auth/react";
 
@@ -73,6 +73,10 @@ const AddVendor = () => {
   };
 
   const AddNewVendor = async (formData) => {
+    if(!userId) {
+      toast("Please login to create a vendor", { type: "error" });
+      return;
+    }
     await fetch(`/api/addVendors`, {
       method: "POST",
       body: JSON.stringify(formData),
@@ -217,17 +221,6 @@ const AddVendor = () => {
           </div>
         </div>
       </form>
-      <ToastContainer
-        position="bottom-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover={false}
-      />
     </div>
   );
 };

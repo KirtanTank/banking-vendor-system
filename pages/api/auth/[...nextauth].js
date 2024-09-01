@@ -1,7 +1,9 @@
 import NextAuth from 'next-auth';
-import connectDb from '../../../middleware/mongoose';
+import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
+import bcrypt from 'bcryptjs';
 import User from '../../../models/User';
+import connectDb from '../../../middleware/mongoose';
 
 export default NextAuth({
     providers: [
@@ -9,32 +11,24 @@ export default NextAuth({
             clientId: process.env.GOOGLE_CLIENT_ID,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
         }),
+        CredentialsProvider({
+            name: "Credentials",
+            async authorize(credentials) {
+                await connectDb();
+                const user = await User.findOne({ email: credentials.email });
+                if (user && bcrypt.compareSync(credentials.password, user.password)) {
+                    return { id: user._id, name: user.name, email: user.email };
+                } else {
+                    throw new Error('Invalid credentials');
+                }
+            }
+        })
     ],
     secret: process.env.JWT_SECRET,
     callbacks: {
-        async jwt({ token, account, profile }) {
-            await connectDb();
-    
-            if (account && profile) {
-                let existingUser = await User.findOne({ email: profile.email });
-    
-                if (!existingUser) {
-                    existingUser = new User({
-                        name: profile.name,
-                        email: profile.email,
-                    });
-                    await existingUser.save();
-                }
-    
-                token.userId = existingUser._id;
-            }
-    
-            return token;
-        },
         async session({ session, token }) {
-            session.userId = token.userId;
+            session.userId = token.sub;
             return session;
         },
     },
-    
 });
