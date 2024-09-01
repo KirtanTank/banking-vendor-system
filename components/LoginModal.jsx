@@ -18,6 +18,8 @@ const LoginModal = ({
     password: "",
   });
 
+  const [loginRequestLoading, isLoginRequestLoading] = useState(false);
+
   const handleChange = ({ target: { name, value } }) => {
     setLoginCredentials({
       ...loginCredentials,
@@ -31,6 +33,7 @@ const LoginModal = ({
   };
 
   const handleLogin = async (e) => {
+    isLoginRequestLoading(true);
     e.preventDefault();
 
     const response = await fetch("/api/loginUser", {
@@ -44,8 +47,6 @@ const LoginModal = ({
     const data = await response.json();
 
     if (response.ok) {
-      toast("Logged in successfully", { type: "success" });
-
       const signInResponse = await signIn("credentials", {
         redirect: false,
         email: loginCredentials.email,
@@ -53,12 +54,16 @@ const LoginModal = ({
       });
 
       if (signInResponse.ok) {
-        setShowLoginModal(false); // Close the modal after successful login
+        isLoginRequestLoading(false);
+        setShowLoginModal(false);
+        toast("Logged in successfully", { type: "success" });
       } else {
         toast("Failed to log in", { type: "error" });
+        isLoginRequestLoading(false);
       }
     } else {
       toast(`Error: ${data.error}`, { type: "error" });
+      isLoginRequestLoading(false);
     }
   };
 
@@ -164,7 +169,7 @@ const LoginModal = ({
                       }`}
                       onClick={handleLogin}
                     >
-                      Login to your account
+                      {loginRequestLoading ? "Logging in..." : "Login to your account"}
                     </button>
                     <div className="text-sm font-medium text-gray-500 dark:text-gray-300">
                       Not registered?{" "}

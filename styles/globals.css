@@ -5,7 +5,7 @@
 
 /* Vendor Card Container */
 .vendor-card {
-    background-color: #38AF79;
+    background-color: #021526;
     border-radius: 10px;
     box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
     width: 100%;
@@ -28,8 +28,8 @@
   
   /* Buttons */
   .vendor-card button {
-    background-color: #57D6A1;
-    color: #000000;
+    background-color: #E2E2B6;
+    color: #021526;
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -39,11 +39,13 @@
     text-align: center;
     align-items: center;
     justify-content: center;
+    font-size: 16px;
+    text-shadow: 2px 2px 10px #021526;
   }
 
   .get-started { 
-    background-color: #48bb78;
-    color: #000000;
+    background-color: #E2E2B6;
+    color: #021526;
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -55,15 +57,8 @@
     justify-content: center;
     padding: 10px;
     z-index: 2;
-  }
-  
-  .vendor-card button:hover {
-    background-color: #2e6b31;
-  }
-  
-  .vendor-card button:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(56, 127, 57, 0.4);
+    text-shadow: 2px 2px 10px #021526;
+    font-weight: 700;
   }
   
   /* Flex Container */

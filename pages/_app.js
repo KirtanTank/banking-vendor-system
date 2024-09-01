@@ -5,6 +5,7 @@ import { SessionProvider, useSession } from "next-auth/react";
 import LoginModal from "../components/LoginModal";
 import RegisterModal from "../components/RegisterModal";
 import { ToastContainer } from "react-toastify";
+import Preloading from "../components/PreLoading";
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   return (
@@ -32,11 +33,11 @@ function MainApp({ Component, pageProps }) {
   }, [status, userId]);
 
   if (status === "loading") {
-    return <div className="min-w-full min-h-screen flex items-center justify-center">Loading...</div>;
+    return <Preloading />;
   }
 
   return (
-    <div className="bg-[#BEFEA8] min-w-full min-h-screen">
+    <div className="bg-gradient-to-r from-[#03346E] to-[#0664D4] min-w-full min-h-screen">
       <div className="flex flex-col gap-5 w-full h-full">
         <Navbar session={session} setShowLoginModal={setShowLoginModal} />
         <Component {...pageProps} />

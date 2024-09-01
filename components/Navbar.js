@@ -17,17 +17,17 @@ const Navbar = ({ session, setShowLoginModal }) => {
 
   const getNavLinkClass = (path) => {
     return router.pathname === path
-      ? "bg-[#387F39] text-[#EEEEEE]"
-      : "hover:bg-[#387F39] transition-all hover:text-[#EEEEEE]";
+      ? "bg-[#E2E2B6] text-[#021526]"
+      : "hover:bg-[#E2E2B6] transition-all hover:text-[#021526]";
   };
 
   return (
     <div>
-      <header className="text-#1F316F body-font bg-[#F6E96B] shadow-xl">
+      <header className="text-#1F316F body-font bg-[#6EACDA] shadow-xl">
         <div className="container mx-auto flex flex-wrap p-2 flex-col md:flex-row items-center">
           <a className="flex title-font font-medium items-center text-#1F316F">
             <Image src={logo} alt="logo" width={50} height={50} />
-            <span className="ml-3 text-2xl font-semibold no-data-font">
+            <span className="ml-3 text-2xl font-semibold text-[#021526]">
               VƎNDORVAULT
             </span>
           </a>
@@ -51,13 +51,13 @@ const Navbar = ({ session, setShowLoginModal }) => {
               </span>
             </Link>
             {session?.userId ? (
-              <button className="rounded-md p-2 font-bold cursor-pointer hover:bg-[#387F39] transition-all hover:text-[#EEEEEE]"
+              <button className="rounded-md p-2 font-bold cursor-pointer hover:bg-[#E2E2B6] transition-all hover:text-[#021526]"
               onClick={handleLogout}
               >
                 Logout
               </button>
             ) : (
-              <button className="rounded-md p-2 font-bold cursor-pointer hover:bg-[#387F39] transition-all hover:text-[#EEEEEE]"
+              <button className="rounded-md p-2 font-bold cursor-pointer hover:bg-[#E2E2B6] transition-all hover:text-[#021526]"
               onClick={() => setShowLoginModal(true)}
               >
                 Login

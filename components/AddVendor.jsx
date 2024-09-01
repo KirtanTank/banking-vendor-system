@@ -99,7 +99,7 @@ const AddVendor = () => {
 
   return (
     <div className="max-w-2xl px-5 m-auto w-full mt-10">
-      <div className="text-3xl mb-6 text-center ">Create New Vendor</div>
+      <div className="text-3xl mb-6 text-center text-[#E2E2B6] font-medium">Create New Vendor</div>
       <form onSubmit={handleSubmit}>
         <div className="grid grid-cols-2 gap-4 max-w-xl m-auto">
           <div className="col-span-2 lg:col-span-1">
@@ -213,7 +213,7 @@ const AddVendor = () => {
 
           <div className="col-span-2 text-right">
             <button
-              className="py-3 px-6 rounded-md bg-green-500 text-white font-bold w-full sm:w-32"
+              className="py-3 px-6 rounded-md bg-[#E2E2B6] text-[#021526] font-bold w-full sm:w-32"
               type="submit"
             >
               CREATE

@@ -23,6 +23,10 @@ const VendorCard = ({
     return formatted.trim();
   };
 
+  const formatAccountNumber = (accNo) => {
+    return accNo.replace(/\d{4}(?=\d)/g, '$& ');
+  };
+
   return (
     <>
       <div
@@ -42,7 +46,7 @@ const VendorCard = ({
                   <span className="text-xl">{item.bankName}</span>
                   <div className="flex items-center space-x-2">
                     <span className="text-lg">
-                      {isVisible ? item.accNo : maskAccountNumber(item.accNo)}
+                      {isVisible ? formatAccountNumber(item.accNo) : maskAccountNumber(item.accNo)}
                     </span>
                     <span onClick={() => toggleVisibility(item._id)}>
                       {isVisible ? <FaEyeSlash /> : <FaEye />}
@@ -53,14 +57,14 @@ const VendorCard = ({
                   </span>
                   <div className="flex mt-4 space-x-3 md:mt-6">
                     <button
-                      className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-[#000000] hover:text-[#FFFFFF] rounded-lg focus:ring-4 focus:outline-none"
+                      className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-[#021526] rounded-lg focus:ring-4 focus:outline-none"
                       onClick={() => editFun(item._id)}
                     >
                       Edit
                     </button>
 
                     <button
-                      className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-[#000000] hover:text-[#FFFFFF] rounded-lg focus:ring-4 focus:outline-none"
+                      className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-[#021526] rounded-lg focus:ring-4 focus:outline-none"
                       onClick={() => {
                         setVendorToBeDelete(item._id);
                         setOpenDeleteModal(true);

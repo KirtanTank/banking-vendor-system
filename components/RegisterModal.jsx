@@ -12,6 +12,8 @@ const RegisterModal = ({ showRegisterModal, setShowRegisterModal }) => {
     password: "",
   });
 
+  const [registerRequestLoading, isRegisterRequestLoading] = useState(false);
+
   const handleChange = ({ target: { name, value } }) => {
     setRegistrationCredentials({
       ...registrationCredentials,
@@ -20,6 +22,7 @@ const RegisterModal = ({ showRegisterModal, setShowRegisterModal }) => {
   };
 
   const handleRegistration = async () => {
+    isRegisterRequestLoading(true);
     const response = await fetch("/api/addUser", {
       method: "POST",
       body: JSON.stringify(registrationCredentials),
@@ -31,8 +34,6 @@ const RegisterModal = ({ showRegisterModal, setShowRegisterModal }) => {
     const data = await response.json();
 
     if (response.ok) {
-      toast("Registered successfully", { type: "success" });
-
       const signInResponse = await signIn("credentials", {
         redirect: false,
         email: registrationCredentials.email,
@@ -40,12 +41,16 @@ const RegisterModal = ({ showRegisterModal, setShowRegisterModal }) => {
       });
 
       if (signInResponse.ok) {
+        isRegisterRequestLoading(false);
         setShowRegisterModal(false);
+        toast("Registered successfully", { type: "success" });
       } else {
         toast("Failed to log in", { type: "error" });
+        isRegisterRequestLoading(false);
       }
     } else {
       toast(`Error: ${data.error}`, { type: "error" });
+      isRegisterRequestLoading(false);
     }
   };
 
@@ -131,19 +136,25 @@ const RegisterModal = ({ showRegisterModal, setShowRegisterModal }) => {
                           className="mt-5 tracking-wide font-semibold bg-green-400 text-white-500 w-full py-4 rounded-lg hover:bg-green-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
                           onClick={handleRegistration}
                         >
-                          <svg
-                            className="w-6 h-6 -ml-2"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
-                            <circle cx="8.5" cy="7" r="4" />
-                            <path d="M20 8v6M23 11h-6" />
-                          </svg>
-                          <span className="ml-4">Register</span>
+                          {registerRequestLoading ? (
+                            <>
+                              <svg
+                                className="w-6 h-6 -ml-2"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              >
+                                <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+                                <circle cx="8.5" cy="7" r="4" />
+                                <path d="M20 8v6M23 11h-6" />
+                              </svg>
+                              <span className="ml-4">Register</span>
+                            </>
+                          ) : (
+                            <span className="ml-4">Loading</span>
+                          )}
                         </button>
                       </div>
                     </div>
